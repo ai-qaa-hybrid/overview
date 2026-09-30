@@ -1,8 +1,7 @@
 # ⚡ Interview Quick Answer Assistant (QAA)
 
 
-# [https://github.com/ai-qaa-hybrid?view_as=public
-](https://ai-qaa-hybrid.github.io/frontend/)
+# https://ai-qaa-hybrid.github.io/frontend
 
 > **The Privacy-First, Hybrid Knowledge Engine for Live Technical Interviews & Rapid Engineering Recall.**
 
