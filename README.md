@@ -23,7 +23,7 @@ QAA converts **single-letter hotkeys** into strict, format-enforced **Answer Con
 
 ### 1. ⚡ Hybrid Search & Smart Multi-LLM Routing
 - **Sub-10ms Local-First Search:** Searches through bundled and custom JSON knowledge bases instantly using fuzzy matching and conversational filler stripping.
-- **Multi-LLM Provider Support:** Seamlessly connect and toggle between leading LLM providers (**Google Gemini, Groq, OpenAI**) using your own API keys.
+- **Multi-LLM Provider Support:** Connect **Google Gemini, Groq, OpenAI, or OpenRouter** with your own API key. A custom base URL is also supported. The model is used only when the topic is not already in the local set.
 - **Streaming LLM Fallback:** If local search yields a miss, the system automatically falls back to your configured LLM while strictly maintaining the hotkey's format contract.
 
 ### 2. 🎯 Binding Hotkey Answer Contracts
@@ -36,15 +36,20 @@ QAA converts **single-letter hotkeys** into strict, format-enforced **Answer Con
 | **`Q`** | **Verbal Answer** | First-person, highly speakable response (40–70 words, natural interview cadence). |
 | **`K`** | **Key Points** | 3–5 high-yield revision bullet points for rapid scanning. |
 
-### 3. 🌐 Native Bilingual & Devanagari Support
-- **Full Hindi & English Voice Recognition:** Toggle voice input seamlessly between `en-US`, `en-IN`, and `hi-IN`.
-- **Conversational Filler Stripping:** Automatically strips spoken fillers (*"क्या है"*, *"किसे कहते हैं"*, *"what is"*, *"can you explain"*) before performing search queries.
-- **Typography Engine:** Integrated `Noto Sans Devanagari` font rendering prevents matra and ligature clipping.
+### 3. 🌐 Recognition Language, Subjects, and Theme
+- **One recognition language for every question.** The default is `en-IN`. You can switch to `en-US` or `en-UK` (`en-GB` in the browser).
+- **Subjects come from the knowledge files.** A file such as `javascript` or `react` becomes a subject, and the Questions page groups each category by subject.
+- **Light and dark themes.** The header button names the theme it will turn on: **Light** switches to the light theme, **Dark** switches to the dark theme. In Settings, the highlighted choice is the theme that is on now.
+- **Conversational filler stripping:** Spoken prefixes such as “what is” and “difference between” are removed before search.
+- **Typography:** `Noto Sans Devanagari` is loaded so Indic text does not clip.
 
-### 4. 🔒 Zero-Downtime Privacy & WebCam Stealth
-- **100% Client-Side Architecture:** Zero server-side data logging or telemetry tracking.
-- **Local Key Isolation:** API keys and local knowledge base overrides are stored exclusively in browser `localStorage`.
-- **Stealth Visual Theme (`#0b0f19`):** High-contrast, anti-glare dark palette designed to eliminate monitor glare reflected on webcams during video calls.
+### 4. 🔒 Browser-Only Notes and a Locked Export
+- **100% client-side.** There is no application server and no telemetry.
+- **Add, Edit, and Import stay in this browser.** They are saved in `localStorage` and do not rewrite the bundled JSON files. Another visitor does not see your changes.
+- **Reset Knowledge to Defaults** deletes that browser copy and shows the original bundled topics again.
+- **Export stays disabled** so the original knowledge cannot be downloaded as a file.
+- **API keys** stay in this browser and are sent only to the provider you select.
+- **Live app:** [https://ai-qaa-hybrid.github.io/frontend/](https://ai-qaa-hybrid.github.io/frontend/)
 
 ---
 
@@ -52,10 +57,9 @@ QAA converts **single-letter hotkeys** into strict, format-enforced **Answer Con
 
 We are actively expanding QAA from a local assistant into a personalized, syncable technical knowledge platform:
 
-* 🔐 **Secure User Authentication (In Progress):** Multi-device synchronization and secure user profiles via auth integration.
-* 🧠 **Personalized Knowledge Hub:** Ability to import personal resumes, system design notes, and custom project summaries into your personal vault.
-* 🛡 **Role-Based Feature Toggles:** Public demo instances currently operate in **Guest Mode** (with specific custom override features disabled to ensure data security and platform stability).
-* ⚡ **Context-Aware Retrieval:** Semantic retrieval over user-uploaded documents with strict local privacy boundaries.
+* 🔐 **Sign-in:** Not built yet. Personal topics already stay in the browser. Accounts would later sync that library across machines.
+* 🧠 **Token budgets:** A future server-side proxy would hold provider keys and cap usage per person. Today there is no shared token wallet. A local hit uses zero model tokens. A miss with a key streams one answer, capped at 500 tokens by default, and aborts after 8 seconds.
+* ⚡ **Code splitting:** The syntax highlighter is still in the main bundle. Loading it only for code answers is open work.
 
 ---
 
@@ -63,13 +67,13 @@ We are actively expanding QAA from a local assistant into a personalized, syncab
 
 | Shortcut | Action |
 | :--- | :--- |
-| **`D`, `C`, `I`, `E`, `Q`, `K`** | Trigger hotkey contract & start instant voice listening |
-| **`Escape`** | Cancel speech listening / Clear active query / Close modals |
-| **`/`** | Focus manual search bar (typing fallback) |
-| **`Y`** | Copy current markdown answer to clipboard |
-| **`S`** | Toggle Settings & Knowledge Manager |
-| **`?`** | Open Shortcuts Cheatsheet |
-| **`Enter`** | Submit typed search query |
+| **`S`** | Turn voice on or off |
+| **`D`, `C`, `I`, `E`, `Q`, `K`** | While voice is on, hold the key and speak. You can let go while you talk |
+| **`Escape`** | Turn voice off, clear the screen, and close Settings |
+| **`/`** | Focus the search field |
+| **`Enter`** | Submit the typed topic for the selected category |
+| **`Y`** | Copy the current answer |
+| **Settings** | Opened from the Settings button, not a hotkey |
 
 ---
 
@@ -77,16 +81,19 @@ We are actively expanding QAA from a local assistant into a personalized, syncab
 
 ```text
 src/
-├── core/                   # Pure Domain Logic (Zero Framework / DOM Dependencies)
-│   ├── search/             # Normalizer, Levenshtein, Sub-10ms Local Search Engine
-│   ├── speech/             # Web Speech API Adapter with Silence Guards
-│   ├── llm/                # Multi-Provider Direct-Fetch SSE Streaming Client
-│   └── storage/            # Local Knowledge Store & Config Management
-├── data/                   # Bundled Initial Knowledge Base (JSON)
-└── ui/                     # Presentation Layer (React 19 + Tailwind 4)
+├── core/                   # Pure TypeScript. No React in this layer
+│   ├── search/             # Category-scoped in-memory search
+│   ├── speech/             # Web Speech API, plus the system default microphone
+│   ├── llm/                # Gemini SSE and OpenAI-compatible streaming
+│   └── storage/            # Bundled JSON merged with this browser's edits
+├── data/                   # Knowledge by category folder and subject file
+└── ui/                     # React 19 + Tailwind 4
+```
+
+The public site is the built app. This overview does not contain the private source.
 
 ---
 
-## 🤝 Open Source & Licensing
+## 🤝 Who it is for
 
-Designed with ❤️ for developers, software engineers, and technical interview candidates.
+Built for developers who want a short, structured answer during a technical interview.
