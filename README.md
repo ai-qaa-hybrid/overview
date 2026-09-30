@@ -1,5 +1,8 @@
 # ⚡ Interview Quick Answer Assistant (QAA)
 
+
+# https://ai-qaa-hybrid.github.io/frontend
+
 > **The Privacy-First, Hybrid Knowledge Engine for Live Technical Interviews & Rapid Engineering Recall.**
 
 QAA is a stealth, low-latency interview companion engineered for high-stakes technical interviews, live coding sessions, and rapid architectural revision. Built around a **single-hotkey contract workflow**, it bridges local instant search with multi-LLM streaming fallbacks to deliver precise, structured answers in milliseconds.
@@ -81,19 +84,16 @@ We are actively expanding QAA from a local assistant into a personalized, syncab
 
 ```text
 src/
-├── core/                   # Pure TypeScript. No React in this layer
-│   ├── search/             # Category-scoped in-memory search
-│   ├── speech/             # Web Speech API, plus the system default microphone
-│   ├── llm/                # Gemini SSE and OpenAI-compatible streaming
-│   └── storage/            # Bundled JSON merged with this browser's edits
-├── data/                   # Knowledge by category folder and subject file
-└── ui/                     # React 19 + Tailwind 4
-```
-
-The public site is the built app. This overview does not contain the private source.
+├── core/                   # Pure Domain Logic (Zero Framework / DOM Dependencies)
+│   ├── search/             # Normalizer, Levenshtein, Sub-10ms Local Search Engine
+│   ├── speech/             # Web Speech API Adapter with Silence Guards
+│   ├── llm/                # Multi-Provider Direct-Fetch SSE Streaming Client
+│   └── storage/            # Local Knowledge Store & Config Management
+├── data/                   # Bundled Initial Knowledge Base (JSON)
+└── ui/                     # Presentation Layer (React 19 + Tailwind 4)
 
 ---
 
-## 🤝 Who it is for
+## 🤝 Open Source & Licensing
 
-Built for developers who want a short, structured answer during a technical interview.
+Designed with ❤️ for developers, software engineers, and technical interview candidates.
