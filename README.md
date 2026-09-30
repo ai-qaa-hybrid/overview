@@ -1,5 +1,9 @@
 # ⚡ Interview Quick Answer Assistant (QAA)
 
+
+# [https://github.com/ai-qaa-hybrid?view_as=public
+](https://ai-qaa-hybrid.github.io/frontend/)
+
 > **The Privacy-First, Hybrid Knowledge Engine for Live Technical Interviews & Rapid Engineering Recall.**
 
 QAA is a stealth, low-latency interview companion engineered for high-stakes technical interviews, live coding sessions, and rapid architectural revision. Built around a **single-hotkey contract workflow**, it bridges local instant search with multi-LLM streaming fallbacks to deliver precise, structured answers in milliseconds.
