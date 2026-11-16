@@ -1,9 +1,8 @@
 # ⚡ Interview Quick Answer Assistant (QAA)
 
-
-# https://ai-qaa-hybrid.github.io/frontend
-
 > **The Privacy-First, Hybrid Knowledge Engine for Live Technical Interviews & Rapid Engineering Recall.**
+
+**Frontend Deployment:** Hosted on [Cloudflare Pages](https://pages.cloudflare.com/)
 
 QAA is a stealth, low-latency interview companion engineered for high-stakes technical interviews, live coding sessions, and rapid architectural revision. Built around a **single-hotkey contract workflow**, it bridges local instant search with multi-LLM streaming fallbacks to deliver precise, structured answers in milliseconds.
 
@@ -52,7 +51,7 @@ QAA converts **single-letter hotkeys** into strict, format-enforced **Answer Con
 - **Reset Knowledge to Defaults** deletes that browser copy and shows the original bundled topics again.
 - **Export stays disabled** so the original knowledge cannot be downloaded as a file.
 - **API keys** stay in this browser and are sent only to the provider you select.
-- **Live app:** [https://ai-qaa-hybrid.github.io/frontend/](https://ai-qaa-hybrid.github.io/frontend/)
+- **Live app:** Deployed on Cloudflare Pages (see [frontend repo](../frontend) for deployment details)
 
 ---
 
